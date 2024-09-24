@@ -1,18 +1,17 @@
 NAME=inception
-
-${NAME}:
-	@mkdir -p ~/data/wordpress ~/data/mariadb
-	sudo docker-compose -f srcs/docker-compose.yml up -d --build
-#     sleep 15
-#     make logs
+COMPOSE=srcs/docker-compose.yml
 
 all: ${NAME}
 
+${NAME}:
+	mkdir -p /home/dolphin/data/wordpress /home/dolphin/data/mysql
+	sudo docker-compose -f $(COMPOSE) up -d --build
+
 down:
-	sudo docker-compose -f srcs/docker-compose.yml down
+	sudo docker-compose -f $(COMPOSE) down
 
 clean:
-	sudo docker-compose -f srcs/docker-compose.yml down -v
+	sudo docker-compose -f $(COMPOSE) down -v
 
 fclean: clean
 	sudo docker system prune --force --volumes --all
@@ -21,9 +20,9 @@ fclean: clean
 re: down all
 
 logs:
-	@echo "---------- MARIADB -----------\n"
-	@sudo docker-compose -f srcs/docker-compose.yml logs mariadb
-	@echo "\n-------- WORDPRESS ----------\n"
-	@sudo docker-compose -f srcs/docker-compose.yml logs wordpress
-	@echo "\n---------- NGINX ------------\n"
-	@sudo docker-compose -f srcs/docker-compose.yml logs nginx
+	echo "---------- MARIADB -----------\n"
+	sudo docker-compose -f $(COMPOSE) logs mariadb
+	echo "\n-------- WORDPRESS ----------\n"
+	sudo docker-compose -f $(COMPOSE) logs wordpress
+	echo "\n---------- NGINX ------------\n"
+	sudo docker-compose -f $(COMPOSE) logs nginx

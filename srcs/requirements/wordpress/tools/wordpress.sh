@@ -22,13 +22,13 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 					--allow-root
 
 	# Create user
-	wp user create $WP_USER $WP_USER_EMAIL			\
-				--role=author						\
-				--user_pass=$WP_USER_PWD			\
-				--allow-root
+	wp user create	$WP_USER $WP_USER_EMAIL			\
+					--role=subscriber				\
+					--user_pass=$WP_USER_PWD		\
+					--allow-root
 
-	wp option update home 'https://localhost' --allow-root
-	wp option update siteurl 'https://localhost' --allow-root
+	wp option update home 'https://scarpent.42.fr' --allow-root
+	wp option update siteurl 'https://scarpent.42.fr' --allow-root
 else
 	echo "WordPress is already configured."
 fi

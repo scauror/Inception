@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Initialize the MariaDB database if it hasn't been initialized yet
-if [ ! -d "/var/lib/mariadb/mariadb" ]; then
+if [ ! -d "/var/lib/mysql/mysql" ]; then
     echo "Initializing MariaDB data directory..."
-    mysql_install_db --user=my_user --datadir=/var/lib/mariadb
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql
 fi
 
 # Start the MariaDB server temporarily in the background
@@ -28,7 +28,8 @@ mysqladmin -u root -p${MDB_ROOT_PWD} shutdown
 exec mysqld --bind-address=0.0.0.0
 
 # To check if mariadb isn't empty, use the following command:
-# mariadb
+# docker exec -it mariadb bash
+# mysql -u root -p
 # SHOW DATABASES;
 # USE <database>;
 # SHOW TABLES;

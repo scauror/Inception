@@ -5,7 +5,7 @@ services:
     build:
       context: ./requirements/nginx
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress:/var/www/html
     depends_on:
       wordpress:
         condition: service_healthy
@@ -13,11 +13,11 @@ services:
       - .env
     ports:
       - "443:443"
-    restart: unless-stopped
+    restart: always
     networks:
       - Inception
     healthcheck:
-      test: ["CMD-SHELL", "curl -k https://localhost || exit 1"]
+      test: ["CMD-SHELL", "curl -k https://scarpent.42.fr || exit 1"]
       interval: 2s
       timeout: 10s
       retries: 5
@@ -28,17 +28,17 @@ services:
     build:
       context: ./requirements/wordpress
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress:/var/www/html
     depends_on:
       mariadb:
         condition: service_healthy
     env_file:
       - .env
-    restart: unless-stopped
+    restart: always
     networks:
       - Inception
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9000 || exit 0"]
+      test: ["CMD-SHELL", "curl -f http://scarpent.42.fr:9000 || exit 0"]
       interval: 2s
       timeout: 10s
       retries: 5
@@ -47,29 +47,29 @@ services:
     container_name: mariadb
     hostname: mariadb
     volumes:
-      - mariadb_data:/var/lib/mariadb
+      - mariadb:/var/lib/mysql
     build:
       context: ./requirements/mariadb
     env_file:
       - .env
-    restart: unless-stopped
+    restart: always
     networks:
       - Inception
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p${MDB_ROOT_PWD} || exit 1"]
+      test: ["CMD-SHELL", "mysqladmin ping -h scarpent.42.fr -u root -p${MDB_ROOT_PWD} || exit 1"]
       interval: 2s
       timeout: 10s
       retries: 5
 
 volumes:
-  mariadb_data:
+  mariadb:
     driver: local
     driver_opts:
       type: none
-      device: /home/dolphin/data/mariadb
+      device: /home/dolphin/data/mysql
       o: bind
 
-  wordpress_data:
+  wordpress:
     driver: local
     driver_opts:
       type: none
